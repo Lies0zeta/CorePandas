@@ -7,12 +7,13 @@ import java.util.List;
 public class DataFrame {
 	String[] index;
 	String[] label;
-	List<List> frame;
+	ArrayList<Frame> frames;
 	
 	
-	public DataFrame(String[]... tabs) {
-		frame = new ArrayList<>();
-		for (String[] arg : tabs) {
+	public DataFrame(String... tabs) {
+		frames = new ArrayList<Frame>();
+		for (String arg : tabs) {
+			frames.add(new Frame(arg));
 			
 		}
 	}
