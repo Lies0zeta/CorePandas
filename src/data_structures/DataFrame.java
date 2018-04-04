@@ -6,10 +6,11 @@ import java.util.List;
 import java.io.*;
 
 public class DataFrame {
-	ArrayList<String> header;
-	ArrayList<Frame> frames;
-	int nbLines;
-	String separator = ",";
+	private ArrayList<String> header;
+	private ArrayList<Frame> frames;
+	private int nbLines;
+	private String separator = ",";
+	private static final int TOP = 10;
 	
 	
 	public DataFrame(String[]... tabs) {
@@ -23,7 +24,6 @@ public class DataFrame {
 	public DataFrame(String fileName, boolean hasHeader) {
 		header = new ArrayList<String>();
 		frames = new ArrayList<Frame>();
-		System.out.println(fileName);
 		File f = new File(fileName);
 		FileReader fr;
 		BufferedReader br;
@@ -58,7 +58,6 @@ public class DataFrame {
 						j++;
 					} 
 					k++;
-					System.out.println(k + "ième ligne : " + s);
 				}
 				nbLines = k;
 			}
@@ -72,19 +71,39 @@ public class DataFrame {
 		}
 	}
 	
-	public void print() {
-		System.out.println("nbLines = " + nbLines);
-		for (String str : header) {
-			System.out.print(str + " | ");
-		}
+	private void printHeader() {
+		for (String str : header)
+			System.out.print(str + " | ");	
 		System.out.println();
-		for (int i = 0; i < nbLines; i++) {
-			for (Frame f : frames) {
+	}
+	
+	private void printLines(int start, int end) {
+		if (start < 0)
+			start = 0;
+		if (end > nbLines)
+			end = nbLines;
+		
+
+		for (int i = start; i < end; i++) {
+			for (Frame f : frames)
 				System.out.print(f.get(i) + " | ");
-			}
 			System.out.println();
 		}
 	}
+
+	public void print() {
+		printHeader();
+		printLines(0, nbLines);
+	}
 	
+	public void top() {
+		printHeader();
+		printLines(0, TOP);
+	}
+	
+	public void tail() {
+		printHeader();
+		printLines(nbLines-TOP, nbLines);
+	}
 	
 }
