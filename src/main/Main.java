@@ -5,7 +5,10 @@ import data_structures.*;
 public class Main {
 
 	public static void main(String[] args) {
-		DataFrame df = new DataFrame("/home/n/nahalh/DEVOPS/CorePandas/files/addresses.csv", true);
+		String fileName = "taxables.csv"; //addresses.csv //taxables.csv
+		DataFrame df = new DataFrame("/home/n/nahalh/DEVOPS/CorePandas/files/" + fileName, true);
+		
+		df.print();
 
 	}
 
