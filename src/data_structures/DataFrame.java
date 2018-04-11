@@ -15,6 +15,7 @@ public class DataFrame {
 	
 	public DataFrame(String[]... tabs) {
 		frames = new ArrayList<Frame>();
+		header = new ArrayList<String>();
 		for (String[] arg : tabs) {
 			frames.add(new Frame(arg));			
 		}
@@ -71,39 +72,97 @@ public class DataFrame {
 		}
 	}
 	
-	private void printHeader() {
-		for (String str : header)
-			System.out.print(str + " | ");	
+	private void printHeader(String... labels) {
+		if (labels.length > 0) {
+			for (String str : labels)
+				System.out.print(str + " | ");
+			System.out.println();
+		}
+		
+		else {
+			for (String str : header)
+				System.out.print(str + " | ");	
+			System.out.println();
+		}
+	}
+	
+	private void printRow(int i) {
+		for (Frame f : frames) {
+			System.out.print(f.get(i) + " | ");
+		}
 		System.out.println();
 	}
 	
-	private void printLines(int start, int end) {
+	/*	
+	private void printColumn(String label) {
+		int i = 0;
+		boolean found = false;
+		while (i < frames.size() && !found) {
+			found = (frames.get(i).getLabel().equals(label));
+		}
+		if (i < frames.size())
+			frames.get(i).print();
+	}*/
+	
+	private void printRows(int start, int end) {
 		if (start < 0)
 			start = 0;
 		if (end > nbLines)
-			end = nbLines;
-		
+			end = nbLines;		
 
 		for (int i = start; i < end; i++) {
-			for (Frame f : frames)
-				System.out.print(f.get(i) + " | ");
-			System.out.println();
+			printRow(i);
 		}
 	}
 
 	public void print() {
 		printHeader();
-		printLines(0, nbLines);
+		printRows(0, nbLines);
 	}
 	
 	public void top() {
 		printHeader();
-		printLines(0, TOP);
+		printRows(0, TOP);
 	}
 	
 	public void tail() {
 		printHeader();
-		printLines(nbLines-TOP, nbLines);
+		printRows(nbLines-TOP, nbLines);
+	}
+	
+	public void select(int... indexes) {
+		printHeader();
+		for (int i = 0; i < indexes.length; i++) {
+			if (indexes[i] < nbLines)
+				printRow(indexes[i]);
+		}		
+	}
+	
+	private Frame getFrameFromLabel(String s) {
+		for (Frame f : frames) {
+			if (f.getLabel().equals(s))
+				return f;
+		}
+		return null;
+	}
+	
+	public void select(String... labels) {
+		ArrayList<Frame> dataframe = new ArrayList<Frame>();
+		Frame f;
+		for (String s : labels) {
+			f = getFrameFromLabel(s);
+			if (f != null)
+				dataframe.add(f);
+		}
+	
+		printHeader(labels);
+		for (int i = 0; i < nbLines; i++) {
+			for (Frame frame : dataframe) {
+				System.out.print(frame.get(i) + " | " );
+			}
+			System.out.println();
+		}
+
 	}
 	
 }

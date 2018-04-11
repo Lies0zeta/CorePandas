@@ -42,8 +42,9 @@ public class Frame<E extends Comparable<E> > {
 			return null;
 		
 		E max = data.get(0);
+		int k;
 		for (int i = 1; i < data.size(); i++) {
-			int k = max.compareTo(data.get(i));
+			k = max.compareTo(data.get(i));
 			if (k < 0)
 				max = data.get(i);
 		}
@@ -56,13 +57,23 @@ public class Frame<E extends Comparable<E> > {
 			return null;
 		
 		E min = data.get(0);
+		int k;
 		for (int i = 1; i < data.size(); i++) {
-			int k = min.compareTo(data.get(i));
+			k = min.compareTo(data.get(i));
 			if (k > 0)
 				min = data.get(i);
 		}
 		return min;
-
+	}
+	
+	public void print() {
+		System.out.println(label);
+		for (int i = 0; i < label.toCharArray().length; i++) {
+			System.out.print('-');
+		}
+		for (E e : data) {
+			System.out.println(e.toString());
+		}
 	}
 	
 	
