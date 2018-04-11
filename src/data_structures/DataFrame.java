@@ -40,27 +40,36 @@ public class DataFrame {
 				int i = 0;
 				
 				//If the file has a header in its first line
-				if (hasHeader) {
-					s = br.readLine();
-					tab = s.split(separator);
-					for (String str : tab) {
-						header.add(str);	
-						frames.add(new Frame(str));
-					}
-				}
 				
 				//Parsing line by line
 				int k = 0;
+				boolean h = hasHeader;
+				int j;				
 				while ((s = br.readLine()) != null) {
 					tab = s.split(separator);
-					int j = 0;
+					j = 0;
+					
 					for (String str : tab) {
-						frames.get(j).add(str);
+						if (h) {
+							if (k==0) {
+								frames.add(new Frame(str));
+							}
+							header.add(str);
+						}
+						else {
+							if (k==0) {
+								frames.add(new Frame(String.valueOf(j)));
+							}
+							frames.get(j).add(str);
+						}
 						j++;
-					} 
+					}
 					k++;
+					h = false;
 				}
 				nbLines = k;
+				if (hasHeader)
+					nbLines--;
 			}
 			catch (Exception e) {
 				System.err.println(e.getMessage());
@@ -74,21 +83,26 @@ public class DataFrame {
 	
 	private void printHeader(String... labels) {
 		int i = 0;
-		if (labels.length > 0) {
+		
+		String[] strs = new String[header.size()];
+		strs = header.toArray(strs);
+		
+		/*if (labels.length > 0) {
 			for (String str : labels) {
 				System.out.print(str + " | ");
 				i += str.length() + 3;
 			}
 			System.out.println();
-		}
+		}*/
 		
-		else {
-			for (String str : header) {
-				System.out.print(str + " | ");	
-				i += str.length() + 3;
-			}
-			System.out.println();
+		if (labels.length > 0) {
+			strs = labels;
 		}
+		for (String str : strs) {
+			System.out.print(str + " | ");	
+			i += str.length() + 3;
+		}
+		System.out.println();
 		
 		for (int j = 0; j < i; j++) {
 			System.out.print("-");
