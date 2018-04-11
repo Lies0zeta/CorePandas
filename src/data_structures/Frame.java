@@ -66,6 +66,8 @@ public class Frame<E extends Comparable<E> > {
 		return min;
 	}
 	
+
+	
 	public void print() {
 		System.out.println(label);
 		for (int i = 0; i < label.toCharArray().length; i++) {
@@ -74,6 +76,10 @@ public class Frame<E extends Comparable<E> > {
 		for (E e : data) {
 			System.out.println(e.toString());
 		}
+	}
+	
+	public boolean isEmpty() {
+		return data.isEmpty();
 	}
 	
 	

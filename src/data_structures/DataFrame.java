@@ -39,7 +39,7 @@ public class DataFrame {
 				String[] tab;
 				int i = 0;
 				
-				//If the file has a header as its first line
+				//If the file has a header in its first line
 				if (hasHeader) {
 					s = br.readLine();
 					tab = s.split(separator);
@@ -73,17 +73,27 @@ public class DataFrame {
 	}
 	
 	private void printHeader(String... labels) {
+		int i = 0;
 		if (labels.length > 0) {
-			for (String str : labels)
+			for (String str : labels) {
 				System.out.print(str + " | ");
+				i += str.length() + 3;
+			}
 			System.out.println();
 		}
 		
 		else {
-			for (String str : header)
+			for (String str : header) {
 				System.out.print(str + " | ");	
+				i += str.length() + 3;
+			}
 			System.out.println();
 		}
+		
+		for (int j = 0; j < i; j++) {
+			System.out.print("-");
+		}
+		System.out.println();
 	}
 	
 	private void printRow(int i) {
@@ -162,7 +172,15 @@ public class DataFrame {
 			}
 			System.out.println();
 		}
-
+	}
+	
+	public void min(String label) {
+		System.out.println("min");
+		System.out.println("------");
+		Frame f = getFrameFromLabel(label);
+		if (f != null) {
+			System.out.println(f.getMin());
+		}
 	}
 	
 }
