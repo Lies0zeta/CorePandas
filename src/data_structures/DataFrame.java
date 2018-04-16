@@ -296,6 +296,9 @@ public class DataFrame {
 		return new DataFrame(filePath, hasColumnIndex, hasRawIndex);
 	}
 
+	/**
+	 * Prints the complete data frame
+	 */
 	public void print() {
 		System.out.println(this.getColumnIndex());
 		Object[] ar = this.getRowIndex().toArray();
@@ -305,6 +308,9 @@ public class DataFrame {
 		}
 	}
 
+	/**
+	 * Prints the first four lines of the data frame
+	 */
 	public void printFirst() {
 		System.out.println(this.getColumnIndex());
 		Object[] ar = this.getRowIndex().toArray();
@@ -314,6 +320,9 @@ public class DataFrame {
 		}
 	}
 
+	/**
+	 * Prints the last four lines of the data frame
+	 */
 	public void printLast() {
 		System.out.println(this.getColumnIndex());
 		Object[] ar = this.getRowIndex().toArray();
@@ -325,10 +334,18 @@ public class DataFrame {
 		}
 	}
 
+	/**
+	 * Prints the specified line as an index
+	 * @param lineNumber is a row index
+	 */
 	public void printLine(final Object lineNumber) {
 		this.printLines(lineNumber);
 	}
 
+	/**
+	 * Prints the specified lines as indexes
+	 * @param lines are raw indexes
+	 */
 	public void printLines(final Object... lines) {
 		System.out.println(this.getColumnIndex());
 		Object[] ar = this.getRowIndex().toArray();
@@ -344,22 +361,44 @@ public class DataFrame {
 		}
 	}
 
+	/**
+	 * Prints the complete data frame from the given dataframe
+	 * @param dataFrame
+	 */
 	public static void print(DataFrame dataFrame) {
 		dataFrame.print();
 	}
 
+	/**
+	 * Prints the first four lines of the data frame from the given dataframe
+	 * @param dataFrame
+	 */
 	public static void printFirst(DataFrame dataFrame) {
 		dataFrame.printFirst();
 	}
 
+	/**
+	 * Prints the last four lines of the data frame from the given dataframe
+	 * @param dataFrame
+	 */
 	public static void printLast(DataFrame dataFrame) {
 		dataFrame.printLast();
 	}
 
+	/**
+	 * Prints the specified line as an index from the given dataframe
+	 * @param dataFrame
+	 * @param lineNumber is a row index
+	 */
 	public static void printLine(DataFrame dataFrame, Object lineNumber) {
 		dataFrame.printLines(lineNumber);
 	}
 	
+	/**
+	 * Prints the specified lines as indexes from the given dataframe
+	 * @param dataFrame
+	 * @param lineNumbers are raw indexes
+	 */
 	public static void printLines(DataFrame dataFrame, final  Object ... lineNumbers) {
 		dataFrame.printLines((Object[]) lineNumbers);
 	}
