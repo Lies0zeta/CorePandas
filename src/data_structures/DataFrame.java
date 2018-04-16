@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,12 +11,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -69,6 +65,21 @@ public class DataFrame
 		return data.size();
 	}
 
+    public Set<Object> getColumnsIndex() {
+        return columnIndex.getNames();
+    }
+    
+    public Set<Object> getRawIndex() {
+        return rawIndex.getNames();
+    }
+    
+    public Set<Object> getCol(final Integer column) {
+    	return new HashSet<Object>(data.getCol(column));
+    }
+    
+    public Set<Object> getCol(final Object column) {
+        return getCol(columnIndex.getNameIndice(column));
+    }
 	// @Override
 	// public Iterator<List<E>> iterator() {
 	// // TODO Do we need this method??
@@ -77,7 +88,6 @@ public class DataFrame
 
 	@Override
 	public String toString() {
-		// Iterator<Data<?>> it;
 		return data.toString();
 	}
 
@@ -91,6 +101,7 @@ public class DataFrame
 
 			int columnsNumber = records.get(0).size();
 			int rowsNumber = records.size();
+			
 			// Initializing structures
 			List<List<String>> listStringList = new ArrayList<>();
 			for (int i = 0; i < columnsNumber; i++) {
@@ -107,9 +118,6 @@ public class DataFrame
 					listStringList.get(j).add(record.get(j));
 				}
 			}
-
-			// TODO : Remove print
-			System.out.println(listStringList);
 
 			List<List<?>> listObjectList = new ArrayList<>();
 			for (int i = 0; i < columnsNumber; i++) {
@@ -202,8 +210,6 @@ public class DataFrame
 					}
 				}
 			}
-			//TODO Remove print
-			System.out.println(listObjectList);
 
 			// Filling column index
 			ArrayList<String> columnIndex = new ArrayList<>();

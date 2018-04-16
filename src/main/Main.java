@@ -56,7 +56,7 @@ public class Main {
 		final DataFrame frame = new DataFrame(la.remove(0),i,la);
 		System.out.println(frame);
 		//System.out.println(i.toString());
-		System.out.println(DataFrame.readCSV("files/test.csv"));
+		System.out.println(DataFrame.readCSV("files/taxables.csv"));
 	}
 
 }

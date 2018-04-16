@@ -92,6 +92,10 @@ public class Data<E> {
         return data.isEmpty() ? 0 : data.get(0).size();
     }    
     
+    List<E> getCol(final Integer colNumber) {
+    	return data.get(colNumber);
+    }
+    
     /**
      * 
      */
