@@ -9,7 +9,7 @@ public class DataFrame
 		// TODO Do we need this implements???
 //		implements Iterable<List<E>> 
 {
-	private final Index index, columns;
+	private final Index rawIndex, columnIndex;
 	private final Data<Object> data;
 
 	public static enum NumberDefault {
@@ -35,17 +35,18 @@ public class DataFrame
 	public DataFrame(final List<? extends List<?>> data) {
 		this(Collections.emptyList(), Collections.emptyList(), data);
 	}
-
+	
 	public DataFrame(final Collection<?> rawIndex, final Collection<?> columnIndex,
 			final List<? extends List<?>> data) {
 		final Data<Object> newData = new Data<>(data);
 		newData.reshape(Math.max(newData.size(), columnIndex.size()), Math.max(newData.length(), rawIndex.size()));
 
 		this.data = newData;
-		this.columns = new Index(columnIndex, newData.size());
-		this.index = new Index(rawIndex, newData.length());
+		this.columnIndex = new Index(columnIndex, newData.size());
+		this.rawIndex = new Index(rawIndex, newData.length());
 	}
 
+	
 	public int size() {
 		return data.size();
 	}

@@ -97,7 +97,14 @@ public class Data<E> {
      */
     @Override
     public String toString() {
-        return data.toString();
+    	String toString = "";
+    	
+    	for(int i=0;i < length(); i++) {
+    		for(int j=0; j < size(); j++)
+    			toString += get(j, i)+" ";
+    		toString += "\n";
+    	}
+        return toString;
     }
 }
 
