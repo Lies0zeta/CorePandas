@@ -325,15 +325,17 @@ public class DataFrame {
 		}
 	}
 
-	public void printLine(final int lineNumber) {
+	public void printLine(final Object lineNumber) {
 		this.printLines(lineNumber);
 	}
 
-	public void printLines(final int... lines) {
+	public void printLines(final Object... lines) {
 		System.out.println(this.getColumnIndex());
 		Object[] ar = this.getRowIndex().toArray();
-		for (int lineNumber : lines) {
-			if (lineNumber < this.getRowIndex().size()) {
+		for (Object lineName : lines) {
+			Integer lineNumber = rowIndex.getNameIndice(lineName);
+			
+			if (lineNumber != null && lineNumber < this.getRowIndex().size()) {
 				System.out.print(ar[lineNumber]);
 				System.out.println(this.getData().getRow(lineNumber));
 			} else {
@@ -354,11 +356,11 @@ public class DataFrame {
 		dataFrame.printLast();
 	}
 
-	public static void printLine(DataFrame dataFrame, int lineNumber) {
+	public static void printLine(DataFrame dataFrame, Object lineNumber) {
 		dataFrame.printLines(lineNumber);
 	}
 	
-	public static void printLines(DataFrame dataFrame, final  int ... lineNumbers) {
-		dataFrame.printLines((int[]) lineNumbers);
+	public static void printLines(DataFrame dataFrame, final  Object ... lineNumbers) {
+		dataFrame.printLines((Object[]) lineNumbers);
 	}
 }

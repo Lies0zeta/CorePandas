@@ -79,9 +79,9 @@ public class Index {
 	 */
 	public Integer getNameIndice(final Object name) {
 		final Integer indice = this.index.get(name);
-		if (indice == null) {
-			throw new BadIndexException("I am afraid that the absent index name " + name + " was given.\n");
-		}
+//		if (indice == null) {
+//			throw new BadIndexException("I am afraid that the absent index name " + name + " was given.\n");
+//		}
 		return indice;
 	}
 
