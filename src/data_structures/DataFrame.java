@@ -50,6 +50,8 @@ public class DataFrame {
 
 		this.data = newData;
 		this.columnIndex = new Index(columnIndex, newData.size());
+		System.err.println(newData.size());
+		System.err.println(newData.length());
 		this.rowIndex = new Index(rawIndex, newData.length());
 	}
 
@@ -351,7 +353,7 @@ public class DataFrame {
 		Object[] ar = this.getRowIndex().toArray();
 		for (Object lineName : lines) {
 			Integer lineNumber = rowIndex.getNameIndice(lineName);
-			
+
 			if (lineNumber != null && lineNumber < this.getRowIndex().size()) {
 				System.out.print(ar[lineNumber]);
 				System.out.println(this.getData().getRow(lineNumber));
@@ -393,13 +395,46 @@ public class DataFrame {
 	public static void printLine(DataFrame dataFrame, Object lineNumber) {
 		dataFrame.printLines(lineNumber);
 	}
-	
+
 	/**
 	 * Prints the specified lines as indexes from the given dataframe
 	 * @param dataFrame
 	 * @param lineNumbers are raw indexes
 	 */
-	public static void printLines(DataFrame dataFrame, final  Object ... lineNumbers) {
+	public static void printLines(DataFrame dataFrame, final Object... lineNumbers) {
 		dataFrame.printLines((Object[]) lineNumbers);
+	}
+
+	public List<? extends List<? extends Comparable<?>>> selectColumns(final Object... columnIds) {
+		List<List<? extends Comparable<?>>> selectedColumnsList = new ArrayList<>();
+		for (Object columnId : columnIds) {
+			if (columnIndex.getNameIndice(columnId) != null) {
+				selectedColumnsList.add(data.getCol(columnIndex.getNameIndice(columnId)));
+			} else {
+				System.out.println("This index does not exist!");
+			}
+		}
+		return selectedColumnsList;
+	}
+
+	public List<? extends List<? extends Comparable<?>>> selectRows(final Object... rowIds) {
+		ArrayList<Integer> rowIn = new ArrayList<>();
+		for (Object rowId : rowIds) {
+			if (rowIndex.getNameIndice(rowId) != null) {
+				rowIn.add(rowIndex.getNameIndice(rowId));
+			} else {
+				System.out.println("This index does not exist!");
+			}
+		}
+		return data.getRows((Integer[]) rowIn.toArray(new Integer[rowIn.size()]));
+	}
+
+	public DataFrame createFromColumns(final Object... columnIds) {
+		return new DataFrame(Collections.emptyList(), Arrays.asList((Object[]) columnIds),
+				selectColumns((Object[]) columnIds));
+	}
+
+	public DataFrame createFromRows(final Object... rowIds) {
+		return new DataFrame(Arrays.asList((Object[]) rowIds), Collections.emptyList(), selectRows((Object[]) rowIds));
 	}
 }

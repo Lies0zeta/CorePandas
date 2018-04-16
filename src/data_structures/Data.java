@@ -75,6 +75,18 @@ public class Data<E extends Comparable<?>> {
 		}
 		return l;
 	}
+	List<? extends List<? extends Comparable<?>>> getRows(Integer ... rowNumbers) {
+		List<List<E>> ll = new ArrayList<>();
+		for (int i = 0; i < this.size(); i++) {
+			ll.add(new ArrayList<E>()); 
+		}
+		for (Integer rowNumber : rowNumbers) {
+			for (int i = 0; i < this.size(); i++) {
+				ll.get(i).add(data.get(i).get(rowNumber)); 
+			}
+		}
+		return ll;
+	}
 	
 	@Override
 	public String toString() {

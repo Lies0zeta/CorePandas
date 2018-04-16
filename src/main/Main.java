@@ -33,28 +33,28 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		//String fileName = "taxables.csv"; //cities.csv //addresses.csv //taxables.csv
-		//DataFrame df = new DataFrame("/home/n/nahalh/DEVOPS/CorePandas/files/" + fileName, true);		
-		//df.print();
-		/*df.top();
-		df.tail();
-		System.out.println("-------------");
-		df.select("City", "LatS");
-		df.min("City");*/
-		List<? extends List<?>> la = randData(20,7);
-		ArrayList<String> l = new ArrayList<String>();
-		ArrayList<Integer> j = new ArrayList<Integer>();
-		l.add("a");
-		l.add("b");
-		j.add(4);
-		j.add(7);
-		j.add(23);
-		ArrayList<Integer> i = new ArrayList<Integer>();
-		for(int k=0;k<la.size();k++)
-			i.add(k);
-
-		final DataFrame frame = new DataFrame(la.remove(0),i,la);
-		System.out.println(frame);
+//		//String fileName = "taxables.csv"; //cities.csv //addresses.csv //taxables.csv
+//		//DataFrame df = new DataFrame("/home/n/nahalh/DEVOPS/CorePandas/files/" + fileName, true);		
+//		//df.print();
+//		/*df.top();
+//		df.tail();
+//		System.out.println("-------------");
+//		df.select("City", "LatS");
+//		df.min("City");*/
+//		List<? extends List<?>> la = randData(20,7);
+//		ArrayList<String> l = new ArrayList<String>();
+//		ArrayList<Integer> j = new ArrayList<Integer>();
+//		l.add("a");
+//		l.add("b");
+//		j.add(4);
+//		j.add(7);
+//		j.add(23);
+//		ArrayList<Integer> i = new ArrayList<Integer>();
+//		for(int k=0;k<la.size();k++)
+//			i.add(k);
+//
+//		final DataFrame frame = new DataFrame(la.remove(0),i,la);
+//		System.out.println(frame);
 		//System.out.println(i.toString());
 		System.out.println(DataFrame.readCSV("files/taxables.csv"));
 		DataFrame df = new DataFrame("files/test.csv", true, false);
@@ -67,6 +67,8 @@ public class Main {
 		DataFrame.printLast(df);
 		df.printLine(7);
 		DataFrame.printLines(df,0,4,5);
+		df.createFromColumns("LonD", "City").print();
+		df.createFromRows(0,20).print();
 	}
 
 }
