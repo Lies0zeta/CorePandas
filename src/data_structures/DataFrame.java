@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,12 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -28,7 +23,11 @@ public class DataFrame
 // implements Iterable<List<E>>
 {
 	private final Index index, columns;
-	private final Data<Object> data;
+	private final Data<? extends Comparable<?>> data;
+
+	public Data<? extends Comparable<?>> getData() {
+		return data;
+	}
 
 	public static enum NumberDefault {
 		LONG_DEFAULT, DOUBLE_DEFAULT
@@ -43,7 +42,7 @@ public class DataFrame
 	}
 
 	public DataFrame(final Collection<?> columns) {
-		this(Collections.emptyList(), columns, Collections.<List<?>>emptyList());
+		this(Collections.emptyList(), columns, Collections.<List<? extends Comparable<?>>>emptyList());
 	}
 
 	public DataFrame(final Collection<?> index, final Collection<?> columns) {
@@ -55,8 +54,8 @@ public class DataFrame
 	}
 
 	public DataFrame(final Collection<?> rawIndex, final Collection<?> columnIndex,
-			final List<? extends List<?>> data) {
-		final Data<Object> newData = new Data<>(data);
+			final List<? extends List<? extends Comparable<?>>> data) {
+		final Data<?> newData = new Data<>(data);
 		newData.reshape(Math.max(newData.size(), columnIndex.size()), Math.max(newData.length(), rawIndex.size()));
 
 		this.data = newData;
@@ -110,7 +109,7 @@ public class DataFrame
 			// TODO : Remove print
 			System.out.println(listStringList);
 
-			List<List<?>> listObjectList = new ArrayList<>();
+			List<List<? extends Comparable<?>>> listObjectList = new ArrayList<>();
 			for (int i = 0; i < columnsNumber; i++) {
 				try {
 					Integer.valueOf(listStringList.get(i).get(0));
@@ -203,6 +202,8 @@ public class DataFrame
 			}
 			//TODO Remove print
 			System.out.println(listObjectList);
+			String name =((ParameterizedType) listObjectList.get(0).getClass().getGenericSuperclass()).getActualTypeArguments()[0].toString();
+			System.out.println(name);
 
 			// Filling column index
 			ArrayList<String> columnIndex = new ArrayList<>();

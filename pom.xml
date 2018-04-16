@@ -28,5 +28,10 @@
 			<artifactId>commons-csv</artifactId>
 			<version>1.5</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-build-plugin</artifactId>
+			<version>1.6</version>
+		</dependency>
 	</dependencies>
 </project>
