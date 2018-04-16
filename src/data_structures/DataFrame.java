@@ -25,14 +25,6 @@ public class DataFrame
 	private final Index index, columns;
 	private final Data<? extends Comparable<?>> data;
 
-	public Data<? extends Comparable<?>> getData() {
-		return data;
-	}
-
-	public static enum NumberDefault {
-		LONG_DEFAULT, DOUBLE_DEFAULT
-	}
-
 	public DataFrame() {
 		this(Collections.<List<Object>>emptyList());
 	}
@@ -63,24 +55,9 @@ public class DataFrame
 		this.index = new Index(rawIndex, newData.length());
 	}
 
-	public int size() {
-		return data.size();
-	}
-
-	// @Override
-	// public Iterator<List<E>> iterator() {
-	// // TODO Do we need this method??
-	// return null;
-	// }
-
-	@Override
-	public String toString() {
-		// Iterator<Data<?>> it;
-		return data.toString();
-	}
-
-	public static DataFrame readCSV(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
-
+	public DataFrame(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
+		List<Object> rawIndex = null, columnIndex = null;
+		List<List<? extends Comparable<?>>> listObjectList = null;
 		try {
 			Reader in = new FileReader(filePath);
 			CSVParser parser;
@@ -96,13 +73,9 @@ public class DataFrame
 			int rowsNumber = records.size();
 
 			// Filling column index
-			ArrayList<Object> columnIndex = new ArrayList<>();
 			if (hasColumnIndex) {
+				columnIndex = new ArrayList<>();
 				columnIndex.addAll(parser.getHeaderMap().keySet());
-			} else {
-				for (int i = 0; i < columnsNumber; i++) {
-					columnIndex.add(i);
-				}
 			}
 
 			// Initializing structures
@@ -122,7 +95,7 @@ public class DataFrame
 			// TODO : Remove print
 			System.out.println(listStringList);
 
-			List<List<? extends Comparable<?>>> listObjectList = new ArrayList<>();
+			listObjectList = new ArrayList<>();
 			for (int i = 0; i < columnsNumber; i++) {
 				try {
 					Integer.valueOf(listStringList.get(i).get(0));
@@ -220,14 +193,11 @@ public class DataFrame
 			String name = ((ParameterizedType) listObjectList.get(0).getClass().getGenericSuperclass())
 					.getActualTypeArguments()[0].toString();
 			System.out.println(name);
-			
+
 			if (hasRawIndex) {
-				ArrayList<Object> rawIndex = new ArrayList<>();
+				rawIndex = new ArrayList<>();
 				rawIndex.addAll(listObjectList.get(0));
 				listObjectList.remove(listObjectList.get(0));
-				return new DataFrame(rawIndex, columnIndex, listObjectList);
-			} else {
-				return new DataFrame(Collections.emptyList(), columnIndex, listObjectList);
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -236,17 +206,57 @@ public class DataFrame
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		if (rawIndex == null) {
+			rawIndex = Collections.emptyList();
+		}
+		if (columnIndex == null) {
+			columnIndex = Collections.emptyList();
+		}
+		final Data<?> newData = new Data<>(listObjectList);
+		newData.reshape(Math.max(newData.size(), columnIndex.size()), Math.max(newData.length(), rawIndex.size()));
+
+		this.data = newData;
+		this.columns = new Index(columnIndex, newData.size());
+		this.index = new Index(rawIndex, newData.length());
+	}
+	
+	public int size() {
+		return data.size();
+	}
+	
+	public Data<? extends Comparable<?>> getData() {
+		return data;
+	}
+
+	// @Override
+	// public Iterator<List<E>> iterator() {
+	// // TODO Do we need this method??
+	// return null;
+	// }
+
+	@Override
+	public String toString() {
+		// Iterator<Data<?>> it;
+		return data.toString();
 	}
 
 	public <T extends Comparable<T>> T getMin(String columnName) {
 		return this.getData().getMin(this.columns.getNameIndice(columnName));
 	}
+
 	public <T extends Comparable<T>> T getMax(String columnName) {
 		return this.getData().getMax(this.columns.getNameIndice(columnName));
 	}
+
 	public <T extends Comparable<T>> Double getMean(String columnName) {
 		return this.getData().getMean(this.columns.getNameIndice(columnName));
+	}
+	
+	public static DataFrame readCSV(String filePath) {
+		return readCSV(filePath, true, false);
+	}
+	public static DataFrame readCSV(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
+		return new DataFrame(filePath, hasColumnIndex, hasRawIndex);
 	}
 }
 
