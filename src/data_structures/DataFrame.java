@@ -23,6 +23,7 @@ public class DataFrame
 // implements Iterable<List<E>>
 {
 	private final Index index, columns;
+
 	private final Data<? extends Comparable<?>> data;
 
 	public DataFrame() {
@@ -223,7 +224,15 @@ public class DataFrame
 	public int size() {
 		return data.size();
 	}
+
+	public Index getColumns() {
+		return columns;
+	}
 	
+	public Index getIndex() {
+		return index;
+	}
+
 	public Data<? extends Comparable<?>> getData() {
 		return data;
 	}
@@ -240,24 +249,55 @@ public class DataFrame
 		return data.toString();
 	}
 
+	/**
+	 * Computes the minimum of the given column with numerical/text values
+	 * @param columnName is the name of the column
+	 * @return minimum of columnName
+	 */
 	public <T extends Comparable<T>> T getMin(String columnName) {
 		return this.getData().getMin(this.columns.getNameIndice(columnName));
 	}
 
+	/**
+	 * Computes the maximum of the given column with numerical/text values
+	 * @param columnName is the name of the column
+	 * @return maximum of columnName
+	 */
 	public <T extends Comparable<T>> T getMax(String columnName) {
 		return this.getData().getMax(this.columns.getNameIndice(columnName));
 	}
 
+	/**
+	 * Computes the average of the given column with numerical values
+	 * @param columnName is the name of the column
+	 * @return average of columnName
+	 */
 	public <T extends Comparable<T>> Double getMean(String columnName) {
 		return this.getData().getMean(this.columns.getNameIndice(columnName));
 	}
 	
+	/**
+	 * Builds data frame from CSV file with column index in the file
+	 * @param filePath name of file with its path
+	 * @return new data frame instance with CSV data
+	 */
 	public static DataFrame readCSV(String filePath) {
 		return readCSV(filePath, true, false);
 	}
+	/**
+	 * Builds data frame from CSV file
+	 * @param filePath name of file with its path
+	 * @param hasColumnIndex is true if the first raw defines the column index in CSV file
+	 * @param hasRawIndex is true if the first column defines the raw index in CSV file
+	 * @return new data frame instance with CSV data
+	 */
 	public static DataFrame readCSV(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
 		return new DataFrame(filePath, hasColumnIndex, hasRawIndex);
 	}
+	
+//	public static void print(DataFrame dataFrame) {
+//		System.out.println(columns);
+//	}
 }
 
 // public class DataFrame {

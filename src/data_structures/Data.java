@@ -10,14 +10,14 @@ public class Data<E extends Comparable<?>> {
 	private final List<List<E>> data;
 
 	/**
-	 * 
+	 * Creates an empty instance of Data
 	 */
 	public Data() {
 		this(Collections.<List<E>>emptyList());
 	}
 
 	/**
-	 * 
+	 * Creates an instance of Data with provided data
 	 * @param data
 	 */
 	public Data(final Collection<? extends Collection<? extends E>> data) {
@@ -28,46 +28,30 @@ public class Data<E extends Comparable<?>> {
 	}
 
 	/**
-	 * 
-	 * @param columnNumber
-	 * @param rowNumber
+	 * Reshapes shorter lists to resemble an array 
+	 * @param columnsNumber
+	 * @param rowsNumber
 	 */
-	public void reshape(final int columnNumber, final int rowNumber) {
-		for (int c = data.size(); c < columnNumber; c++) {
-			add(new ArrayList<E>(rowNumber));
+	public void reshape(final int columnsNumber, final int rowsNumber) {
+		for (int c = data.size(); c < columnsNumber; c++) {
+			add(new ArrayList<E>(rowsNumber));
 		}
 
 		for (final List<E> dataColumn : data) {
-			for (int r = dataColumn.size(); r < rowNumber; r++) {
+			for (int r = dataColumn.size(); r < rowsNumber; r++) {
 				dataColumn.add(null);
 			}
 		}
 	}
 
-	/**
-	 * 
-	 * @param columnNumber
-	 * @param rowNumber
-	 * @return
-	 */
 	public E get(final int columnNumber, final int rowNumber) {
 		return data.get(columnNumber).get(rowNumber);
 	}
 
-	/**
-	 * 
-	 * @param value
-	 * @param columnNumber
-	 * @param rowNumber
-	 */
 	public void set(final E value, final int colNumber, final int rowNumber) {
 		data.get(colNumber).set(rowNumber, value);
 	}
 
-	/**
-	 * 
-	 * @param dataColumn
-	 */
 	public void add(final List<E> dataColumn) {
 		final int len = length();
 		for (int r = dataColumn.size(); r < len; r++) {
@@ -76,25 +60,14 @@ public class Data<E extends Comparable<?>> {
 		data.add(dataColumn);
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public int size() {
 		return data.size();
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public int length() {
 		return data.isEmpty() ? 0 : data.get(0).size();
 	}
 
-	/**
-	 * 
-	 */
 	@Override
 	public String toString() {
 		return data.toString();
