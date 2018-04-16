@@ -62,6 +62,11 @@ public class Main {
 		System.out.println(df.getMin("City").toString());
 		System.out.println(df.getMax("LonD").toString());
 		System.out.println(df.getMean("LatM").toString());
+		DataFrame.print(df);
+		DataFrame.printFirst(df);
+		DataFrame.printLast(df);
+		df.printLine(7);
+		DataFrame.printLines(df,0,4,5);
 	}
 
 }

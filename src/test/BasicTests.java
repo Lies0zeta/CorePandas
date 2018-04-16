@@ -42,17 +42,17 @@ public class BasicTests {
         assertArrayEquals(
                 "column names are correct",
                 new Object[] {"Index", "Item", "Cost", "Tax", "Total"},
-                df1.getColumnsIndex().toArray()
+                df1.getColumnIndex().toArray()
             );
         assertArrayEquals(
                 "column names are correct",
                 new Object[] {"Index", "Item", "Cost", "Tax", "Total"},
-                df2.getColumnsIndex().toArray()
+                df2.getColumnIndex().toArray()
             );
         assertArrayEquals(
                 "row names are correct",
                 new Object[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
-                df2.getRawIndex().toArray()
+                df2.getRowIndex().toArray()
             );
         assertArrayEquals(
                 "data is correct",

@@ -28,7 +28,7 @@ public class Data<E extends Comparable<?>> {
 	}
 
 	/**
-	 * Reshapes shorter lists to resemble an array 
+	 * Reshapes shorter lists to resemble an array
 	 * @param columnsNumber
 	 * @param rowsNumber
 	 */
@@ -62,31 +62,36 @@ public class Data<E extends Comparable<?>> {
 
 	public int size() {
 		return data.size();
-	}  
-    
-    List<E> getCol(final Integer colNumber) {
-    	return data.get(colNumber);
-    }
-    
-    /**
-     * 
-     */
-    @Override
-    public String toString() {
-    	String toString = "";
-    	
-    	for(int i=0;i < length(); i++) {
-    		for(int j=0; j < size(); j++)
-    			toString += get(j, i)+" ";
-    		toString += "\n";
-    	}
-        return toString;
-    }
+	}
+
+	List<E> getCol(final Integer colNumber) {
+		return data.get(colNumber);
+	}
+
+	List<E> getRow(Integer rowNumber) {
+		List<E> l = new ArrayList<>(); 
+		for (int i = 0; i < this.size(); i++) {
+			l.add(data.get(i).get(rowNumber));
+		}
+		return l;
+	}
+	
+	@Override
+	public String toString() {
+		String toString = "";
+
+		for (int i = 0; i < length(); i++) {
+			for (int j = 0; j < size(); j++)
+				toString += get(j, i) + " ";
+			toString += "\n";
+		}
+		return toString;
+	}
 
 	public int length() {
 		return data.isEmpty() ? 0 : data.get(0).size();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T extends Comparable<T>> T getMin(int columnIndex) {
 		return Collections.min((Collection<T>) data.get(columnIndex));

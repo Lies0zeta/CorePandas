@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.ParameterizedType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,13 +15,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 public class DataFrame {
-	private final Index rawIndex, columnIndex;
+	private final Index rowIndex, columnIndex;
 	private final Data<? extends Comparable<?>> data;
 
 	public DataFrame() {
@@ -44,7 +42,7 @@ public class DataFrame {
 	public DataFrame(final List<? extends List<?>> data) {
 		this(Collections.emptyList(), Collections.emptyList(), data);
 	}
-	
+
 	public DataFrame(final Collection<?> rawIndex, final Collection<?> columnIndex,
 			final List<? extends List<? extends Comparable<?>>> data) {
 		final Data<?> newData = new Data<>(data);
@@ -52,24 +50,24 @@ public class DataFrame {
 
 		this.data = newData;
 		this.columnIndex = new Index(columnIndex, newData.size());
-		this.rawIndex = new Index(rawIndex, newData.length());
+		this.rowIndex = new Index(rawIndex, newData.length());
 	}
 
-    public Set<Object> getColumnsIndex() {
-        return columnIndex.getNames();
-    }
-    
-    public Set<Object> getRawIndex() {
-        return rawIndex.getNames();
-    }
-    
-    public Set<Object> getCol(final Integer column) {
-    	return new HashSet<Object>(data.getCol(column));
-    }
-    
-    public Set<Object> getCol(final Object column) {
-        return getCol(columnIndex.getNameIndice(column));
-    }
+	public Set<Object> getColumnIndex() {
+		return columnIndex.getNames();
+	}
+
+	public Set<Object> getRowIndex() {
+		return rowIndex.getNames();
+	}
+
+	public Set<Object> getCol(final Integer column) {
+		return new HashSet<Object>(data.getCol(column));
+	}
+
+	public Set<Object> getCol(final Object column) {
+		return getCol(columnIndex.getNameIndice(column));
+	}
 
 	public DataFrame(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
 		List<Object> rawIndex = null, columnIndex = null;
@@ -89,13 +87,11 @@ public class DataFrame {
 			int columnsNumber = records.get(0).size();
 			int rowsNumber = records.size();
 
-
 			// Filling column index
 			if (hasColumnIndex) {
 				columnIndex = new ArrayList<>();
 				columnIndex.addAll(parser.getHeaderMap().keySet());
 			}
-
 
 			// Initializing structures
 			List<List<String>> listStringList = new ArrayList<>();
@@ -204,9 +200,6 @@ public class DataFrame {
 					}
 				}
 			}
-			
-			String name = ((ParameterizedType) listObjectList.get(0).getClass().getGenericSuperclass())
-					.getActualTypeArguments()[0].toString();
 
 			if (hasRawIndex) {
 				rawIndex = new ArrayList<>();
@@ -231,9 +224,9 @@ public class DataFrame {
 
 		this.data = newData;
 		this.columnIndex = new Index(columnIndex, newData.size());
-		this.rawIndex = new Index(rawIndex, newData.length());
+		this.rowIndex = new Index(rawIndex, newData.length());
 	}
-	
+
 	public int size() {
 		return data.size();
 	}
@@ -280,7 +273,7 @@ public class DataFrame {
 	public <T extends Comparable<T>> Double getMean(String columnName) {
 		return this.getData().getMean(this.columnIndex.getNameIndice(columnName));
 	}
-	
+
 	/**
 	 * Builds data frame from CSV file with column index in the file
 	 * @param filePath name of file with its path
@@ -289,18 +282,83 @@ public class DataFrame {
 	public static DataFrame readCSV(String filePath) {
 		return readCSV(filePath, true, false);
 	}
+
 	/**
 	 * Builds data frame from CSV file
 	 * @param filePath name of file with its path
-	 * @param hasColumnIndex is true if the first raw defines the column index in CSV file
-	 * @param hasRawIndex is true if the first column defines the raw index in CSV file
+	 * @param hasColumnIndex is true if the first raw defines the column index in
+	 * CSV file
+	 * @param hasRawIndex is true if the first column defines the raw index in CSV
+	 * file
 	 * @return new data frame instance with CSV data
 	 */
 	public static DataFrame readCSV(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
 		return new DataFrame(filePath, hasColumnIndex, hasRawIndex);
 	}
+
+	public void print() {
+		System.out.println(this.getColumnIndex());
+		Object[] ar = this.getRowIndex().toArray();
+		for (int i = 0; i < this.getRowIndex().size(); i++) {
+			System.out.print(ar[i]);
+			System.out.println(this.getData().getRow(i));
+		}
+	}
+
+	public void printFirst() {
+		System.out.println(this.getColumnIndex());
+		Object[] ar = this.getRowIndex().toArray();
+		for (int i = 0; i < this.getRowIndex().size() && i < 4; i++) {
+			System.out.print(ar[i]);
+			System.out.println(this.getData().getRow(i));
+		}
+	}
+
+	public void printLast() {
+		System.out.println(this.getColumnIndex());
+		Object[] ar = this.getRowIndex().toArray();
+		for (int i = 0; i < this.getRowIndex().size(); i++) {
+			if ((this.getRowIndex().size() - i) < 5) {
+				System.out.print(ar[i]);
+				System.out.println(this.getData().getRow(i));
+			}
+		}
+	}
+
+	public void printLine(final int lineNumber) {
+		this.printLines(lineNumber);
+	}
+
+	public void printLines(final int... lines) {
+		System.out.println(this.getColumnIndex());
+		Object[] ar = this.getRowIndex().toArray();
+		for (int lineNumber : lines) {
+			if (lineNumber < this.getRowIndex().size()) {
+				System.out.print(ar[lineNumber]);
+				System.out.println(this.getData().getRow(lineNumber));
+			} else {
+				System.out.println("Out of bounds! Select the number between 0 and " + (this.getRowIndex().size() - 1));
+			}
+		}
+	}
+
+	public static void print(DataFrame dataFrame) {
+		dataFrame.print();
+	}
+
+	public static void printFirst(DataFrame dataFrame) {
+		dataFrame.printFirst();
+	}
+
+	public static void printLast(DataFrame dataFrame) {
+		dataFrame.printLast();
+	}
+
+	public static void printLine(DataFrame dataFrame, int lineNumber) {
+		dataFrame.printLines(lineNumber);
+	}
 	
-//	public static void print(DataFrame dataFrame) {
-//		System.out.println(columns);
-//	}
+	public static void printLines(DataFrame dataFrame, final  int ... lineNumbers) {
+		dataFrame.printLines((int[]) lineNumbers);
+	}
 }
