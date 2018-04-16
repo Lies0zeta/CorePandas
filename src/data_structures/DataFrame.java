@@ -80,10 +80,10 @@ public class DataFrame
 		return data.toString();
 	}
 
-	public static void readCSV() {
+	public static DataFrame readCSV(String filePath) {
 
 		try {
-			Reader in = new FileReader("files/test.csv");
+			Reader in = new FileReader(filePath);
 
 			CSVParser parser = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
 			List<CSVRecord> records = parser.getRecords();
@@ -91,107 +91,106 @@ public class DataFrame
 			int columnsNumber = records.get(0).size();
 			int rowsNumber = records.size();
 			// Initializing structures
-			List<List<String>> l = new ArrayList<>();
+			List<List<String>> listStringList = new ArrayList<>();
 			for (int i = 0; i < columnsNumber; i++) {
 				// l.add(DataFrame.getType(records.get(0).get(0)));
 
 				List<String> ll = new ArrayList<>();
-				l.add(ll);
+				listStringList.add(ll);
 			}
 
 			// Filling in the records
 			for (int i = 0; i < rowsNumber; i++) {
 				CSVRecord record = records.get(i);
 				for (int j = 0; j < columnsNumber; j++) {
-					l.get(j).add(record.get(j));
+					listStringList.get(j).add(record.get(j));
 				}
 			}
 
 			// TODO : Remove print
-			System.out.println(l);
+			System.out.println(listStringList);
 
-			List<List<?>> newL = new ArrayList<>();
+			List<List<?>> listObjectList = new ArrayList<>();
 			for (int i = 0; i < columnsNumber; i++) {
-				// ArrayList<?> newList;// = new ArrayList<>();
 				try {
-					Integer.valueOf(l.get(i).get(0));
+					Integer.valueOf(listStringList.get(i).get(0));
 					ArrayList<Integer> newList = new ArrayList<>();
-					for (String str : l.get(i)) {
+					for (String str : listStringList.get(i)) {
 						newList.add(Integer.valueOf(str));
 					}
-					newL.add(newList);
+					listObjectList.add(newList);
 				} catch (NumberFormatException iE) {
 					try {
-						Long.valueOf(l.get(i).get(0));
+						Long.valueOf(listStringList.get(i).get(0));
 						ArrayList<Long> newList = new ArrayList<>();
-						for (String str : l.get(i)) {
+						for (String str : listStringList.get(i)) {
 							newList.add(Long.valueOf(str));
 						}
-						newL.add(newList);
+						listObjectList.add(newList);
 					} catch (NumberFormatException lE) {
 						try {
-							Double.valueOf(l.get(i).get(0));
+							Double.valueOf(listStringList.get(i).get(0));
 							ArrayList<Double> newList = new ArrayList<>();
-							for (String str : l.get(i)) {
+							for (String str : listStringList.get(i)) {
 								newList.add(Double.valueOf(str));
 							}
-							newL.add(newList);
+							listObjectList.add(newList);
 						} catch (NumberFormatException dE) {
 							try {
-								new SimpleDateFormat("dd/MM/yyyy").parse(l.get(i).get(0));
+								new SimpleDateFormat("dd/MM/yyyy").parse(listStringList.get(i).get(0));
 								ArrayList<Date> newList = new ArrayList<>();
-								for (String str : l.get(i)) {
+								for (String str : listStringList.get(i)) {
 									newList.add(new SimpleDateFormat("dd/MM/yyyy").parse(str));
 								}
-								newL.add(newList);
+								listObjectList.add(newList);
 							} catch (ParseException e1) {
 								try {
-									new SimpleDateFormat("dd-MMM-yyyy").parse(l.get(i).get(0));
+									new SimpleDateFormat("dd-MMM-yyyy").parse(listStringList.get(i).get(0));
 									ArrayList<Date> newList = new ArrayList<>();
-									for (String str : l.get(i)) {
+									for (String str : listStringList.get(i)) {
 										newList.add(new SimpleDateFormat("dd-MMM-yyyy").parse(str));
 									}
-									newL.add(newList);
+									listObjectList.add(newList);
 								} catch (ParseException e2) {
 									try {
-										new SimpleDateFormat("MM dd, yyyy").parse(l.get(i).get(0));
+										new SimpleDateFormat("MM dd, yyyy").parse(listStringList.get(i).get(0));
 										ArrayList<Date> newList = new ArrayList<>();
-										for (String str : l.get(i)) {
+										for (String str : listStringList.get(i)) {
 											newList.add(new SimpleDateFormat("MM dd, yyyy").parse(str));
 										}
-										newL.add(newList);
+										listObjectList.add(newList);
 									} catch (ParseException e3) {
 										try {
-											new SimpleDateFormat("E, MMM dd yyyy").parse(l.get(i).get(0));
+											new SimpleDateFormat("E, MMM dd yyyy").parse(listStringList.get(i).get(0));
 											ArrayList<Date> newList = new ArrayList<>();
-											for (String str : l.get(i)) {
+											for (String str : listStringList.get(i)) {
 												newList.add(new SimpleDateFormat("E, MMM dd yyyy").parse(str));
 											}
-											newL.add(newList);
+											listObjectList.add(newList);
 										} catch (ParseException e4) {
 											try {
-												new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss").parse(l.get(i).get(0));
+												new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss").parse(listStringList.get(i).get(0));
 												ArrayList<Date> newList = new ArrayList<>();
-												for (String str : l.get(i)) {
+												for (String str : listStringList.get(i)) {
 													newList.add(
 															new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss").parse(str));
 												}
-												newL.add(newList);
+												listObjectList.add(newList);
 											} catch (ParseException e5) {
 												try {
-													new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(l.get(i).get(0));
+													new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(listStringList.get(i).get(0));
 													ArrayList<Date> newList = new ArrayList<>();
-													for (String str : l.get(i)) {
+													for (String str : listStringList.get(i)) {
 														newList.add(new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
 																.parse(str));
 													}
-													newL.add(newList);
+													listObjectList.add(newList);
 												} catch (ParseException e6) {
 													ArrayList<String> newList = new ArrayList<>();
-													for (String str : l.get(i)) {
+													for (String str : listStringList.get(i)) {
 														newList.add(new String(str));
 													}
-													newL.add(newList);
+													listObjectList.add(newList);
 												}
 											}
 										}
@@ -202,9 +201,14 @@ public class DataFrame
 					}
 				}
 			}
-			System.out.println(newL);
-			//newL.get(0).values().stream().mapToInt(i -> i.intValue()).sum();
+			//TODO Remove print
+			System.out.println(listObjectList);
 
+			// Filling column index
+			ArrayList<String> columnIndex = new ArrayList<>();
+			columnIndex.addAll(parser.getHeaderMap().keySet());
+			
+			return new DataFrame(Collections.emptyList(),columnIndex, listObjectList);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -212,6 +216,7 @@ public class DataFrame
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 }
 

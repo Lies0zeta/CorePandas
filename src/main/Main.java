@@ -5,7 +5,7 @@ import data_structures.*;
 public class Main {
 
 	public static void main(String[] args) {
-		DataFrame.readCSV();
+		System.out.println(DataFrame.readCSV("files/test.csv"));
 	}
 
 }
