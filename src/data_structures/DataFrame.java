@@ -79,23 +79,36 @@ public class DataFrame
 		return data.toString();
 	}
 
-	public static DataFrame readCSV(String filePath) {
+	public static DataFrame readCSV(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
 
 		try {
 			Reader in = new FileReader(filePath);
+			CSVParser parser;
 
-			CSVParser parser = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
+			if (hasColumnIndex) {
+				parser = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
+			} else {
+				parser = CSVFormat.RFC4180.parse(in);
+			}
 			List<CSVRecord> records = parser.getRecords();
 
 			int columnsNumber = records.get(0).size();
 			int rowsNumber = records.size();
+
+			// Filling column index
+			ArrayList<Object> columnIndex = new ArrayList<>();
+			if (hasColumnIndex) {
+				columnIndex.addAll(parser.getHeaderMap().keySet());
+			} else {
+				for (int i = 0; i < columnsNumber; i++) {
+					columnIndex.add(i);
+				}
+			}
+
 			// Initializing structures
 			List<List<String>> listStringList = new ArrayList<>();
 			for (int i = 0; i < columnsNumber; i++) {
-				// l.add(DataFrame.getType(records.get(0).get(0)));
-
-				List<String> ll = new ArrayList<>();
-				listStringList.add(ll);
+				listStringList.add(new ArrayList<String>());
 			}
 
 			// Filling in the records
@@ -168,7 +181,8 @@ public class DataFrame
 											listObjectList.add(newList);
 										} catch (ParseException e4) {
 											try {
-												new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss").parse(listStringList.get(i).get(0));
+												new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss")
+														.parse(listStringList.get(i).get(0));
 												ArrayList<Date> newList = new ArrayList<>();
 												for (String str : listStringList.get(i)) {
 													newList.add(
@@ -177,7 +191,8 @@ public class DataFrame
 												listObjectList.add(newList);
 											} catch (ParseException e5) {
 												try {
-													new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(listStringList.get(i).get(0));
+													new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
+															.parse(listStringList.get(i).get(0));
 													ArrayList<Date> newList = new ArrayList<>();
 													for (String str : listStringList.get(i)) {
 														newList.add(new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
@@ -200,16 +215,20 @@ public class DataFrame
 					}
 				}
 			}
-			//TODO Remove print
+			// TODO Remove print
 			System.out.println(listObjectList);
-			String name =((ParameterizedType) listObjectList.get(0).getClass().getGenericSuperclass()).getActualTypeArguments()[0].toString();
+			String name = ((ParameterizedType) listObjectList.get(0).getClass().getGenericSuperclass())
+					.getActualTypeArguments()[0].toString();
 			System.out.println(name);
-
-			// Filling column index
-			ArrayList<String> columnIndex = new ArrayList<>();
-			columnIndex.addAll(parser.getHeaderMap().keySet());
 			
-			return new DataFrame(Collections.emptyList(),columnIndex, listObjectList);
+			if (hasRawIndex) {
+				ArrayList<Object> rawIndex = new ArrayList<>();
+				rawIndex.addAll(listObjectList.get(0));
+				listObjectList.remove(listObjectList.get(0));
+				return new DataFrame(rawIndex, columnIndex, listObjectList);
+			} else {
+				return new DataFrame(Collections.emptyList(), columnIndex, listObjectList);
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -218,6 +237,16 @@ public class DataFrame
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public <T extends Comparable<T>> T getMin(String columnName) {
+		return this.getData().getMin(this.columns.getNameIndice(columnName));
+	}
+	public <T extends Comparable<T>> T getMax(String columnName) {
+		return this.getData().getMax(this.columns.getNameIndice(columnName));
+	}
+	public <T extends Comparable<T>> Double getMean(String columnName) {
+		return this.getData().getMean(this.columns.getNameIndice(columnName));
 	}
 }
 
