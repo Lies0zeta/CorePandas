@@ -101,10 +101,33 @@ public class Data<E extends Comparable<?>> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public<T extends Comparable<T>> T getMin(int columnIndex) {
+	public <T extends Comparable<T>> T getMin(int columnIndex) {
 		return Collections.min((Collection<T>) data.get(columnIndex));
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T extends Comparable<T>> T getMax(int columnIndex) {
+		return Collections.max((Collection<T>) data.get(columnIndex));
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Comparable<T>> Double getMean(int columnIndex) {
+		if (data.get(columnIndex).get(0) instanceof Integer) {
+			return ((List<Integer>) data.get(columnIndex)).stream().mapToInt(Integer::intValue).summaryStatistics()
+					.getAverage();
+		} else if (data.get(columnIndex).get(0) instanceof Double) {
+			return ((List<Double>) data.get(columnIndex)).stream().mapToInt(Double::intValue).summaryStatistics()
+					.getAverage();
+		} else if (data.get(columnIndex).get(0) instanceof Long) {
+			return ((List<Long>) data.get(columnIndex)).stream().mapToInt(Long::intValue).summaryStatistics()
+					.getAverage();
+		} else if (data.get(columnIndex).get(0) instanceof Float) {
+			return ((List<Float>) data.get(columnIndex)).stream().mapToInt(Float::intValue).summaryStatistics()
+					.getAverage();
+		} else {
+			return null;
+		}
+	}
 }
 
 // public class Frame<E extends Comparable<E> > {
