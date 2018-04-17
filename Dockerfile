@@ -65,6 +65,6 @@ WORKDIR /root/devops/pandas
 ADD src/ files/ pom.xml /root/devops/pandas/
 
 # Compile Java sources
-RUN maven build
+RUN maven:build
 
 # Copy entrypoint scripts

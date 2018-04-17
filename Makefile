@@ -1,10 +1,11 @@
 all: run
 
 run: build
-	docker run -it pandas_builder:latest 
+	docker run -it pandas_builder:latest /bin/bash
 
 build:
 	docker build -t pandas_builder .
 
-clean:
-	maven clean
+publish: build
+	docker push davtyannarek/corepandas:pandas_builder
+	
