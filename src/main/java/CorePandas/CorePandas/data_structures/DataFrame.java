@@ -91,7 +91,7 @@ public class DataFrame {
 	public static<E extends Comparable<?>> DataFrame createOneRow(final E... rawData) {
 		List<List<? extends Comparable<?>>> oneList = new ArrayList<>();
 
-		for (Object rawObject : rawData) {
+		for (E rawObject : rawData) {
 			List<? extends Comparable<?>> oneRowList = (List<? extends Comparable<?>>) Arrays.asList(rawObject);
 			oneList.add(oneRowList);
 		}
