@@ -87,7 +87,7 @@ Software requirements:
 
 ### Compilation/Building  
 * Step 1: build the project from sources:  
-`mvn build`  
+`mvn install`  
 
 ### Testing
 * Step 1: testing the project with defined test:  
