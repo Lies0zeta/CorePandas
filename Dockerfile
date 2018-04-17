@@ -59,13 +59,13 @@ RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 RUN apt-get update && apt-get install -y maven
 
 WORKDIR /root/
-RUN mkdir -p devops/pandas
-WORKDIR /root/devops/pandas
+RUN mkdir -p devops/CorePandas
+WORKDIR /root/devops/CorePandas
 # Copy Java sources
 RUN mkdir src && mkdir files
-COPY ./src/ /root/devops/pandas/src/
-COPY ./files/ /root/devops/pandas/files/
-COPY pom.xml /root/devops/pandas/
+COPY ./src/ /root/devops/CorePandas/src
+COPY ./files/ /root/devops/CorePandas/files
+COPY pom.xml /root/devops/CorePandas/
 
 # Compile Java sources
 RUN mvn install

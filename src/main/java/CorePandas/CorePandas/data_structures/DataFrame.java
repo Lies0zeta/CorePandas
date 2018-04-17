@@ -88,7 +88,7 @@ public class DataFrame {
 	 * @return new instance of data frame with one row
 	 */
 	@SuppressWarnings("unchecked")
-	public static DataFrame createOneRow(final Object... rawData) {
+	public static<E extends Comparable<?>> DataFrame createOneRow(final E... rawData) {
 		List<List<? extends Comparable<?>>> oneList = new ArrayList<>();
 
 		for (Object rawObject : rawData) {
@@ -105,7 +105,7 @@ public class DataFrame {
 	 * @return new instance of data frame with one column
 	 */
 	@SuppressWarnings("unchecked")
-	public static DataFrame createOneColumn(final Object... rawData) {
+	public static<E extends Comparable<?>> DataFrame createOneColumn(final E... rawData) {
 		List<List<? extends Comparable<?>>> oneList = new ArrayList<>();
 		List<? extends Comparable<?>> oneColumnList;
 
