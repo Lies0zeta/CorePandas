@@ -23,54 +23,99 @@ public class DataFrame {
 	private final Index rowIndex, columnIndex;
 	private final Data<? extends Comparable<?>> data;
 
+	/**
+	 * Builds empty data frame
+	 */
 	public DataFrame() {
 		this(Collections.<List<Object>>emptyList());
 	}
 
-	public DataFrame(final Object... columns) {
-		this(Arrays.asList((Object[]) columns));
+	/**
+	 * Builds empty data frame with specified column index
+	 * @param columnsIndex are objects to define column index
+	 */
+	public DataFrame(final Object... columnsIndex) {
+		this(Arrays.asList((Object[]) columnsIndex));
 	}
 
-	public DataFrame(final Collection<?> columns) {
-		this(Collections.emptyList(), columns, Collections.<List<? extends Comparable<?>>>emptyList());
+	/**
+	 * Builds empty data frame with specified column index
+	 * @param columnsIndex is collection of objects to define column index
+	 */
+	public DataFrame(final Collection<?> columnsIndex) {
+		this(Collections.emptyList(), columnsIndex, Collections.<List<? extends Comparable<?>>>emptyList());
 	}
 
-	public DataFrame(final Collection<?> index, final Collection<?> columns) {
-		this(index, columns, Collections.<List<?>>emptyList());
+	/**
+	 * Builds empty data frame with specified column and row index
+	 * @param rowsIndex is collection of objects to define row index
+	 * @param columnsIndex is collection of objects to define column index
+	 */
+	public DataFrame(final Collection<?> rowsIndex, final Collection<?> columnsIndex) {
+		this(rowsIndex, columnsIndex, Collections.<List<?>>emptyList());
 	}
 
-	public DataFrame(final List<? extends List<?>> data) {
-		this(Collections.emptyList(), Collections.emptyList(), data);
+	/**
+	 * Builds data frame with specified data and empty column and row index
+	 * @param rawData is data to create data frame from
+	 */
+	public DataFrame(final List<? extends List<? extends Comparable<?>>> rawData) {
+		this(Collections.emptyList(), Collections.emptyList(), rawData);
 	}
 
-	public DataFrame(final Collection<?> rawIndex, final Collection<?> columnIndex,
-			final List<? extends List<? extends Comparable<?>>> data) {
-		final Data<?> newData = new Data<>(data);
-		newData.reshape(Math.max(newData.size(), columnIndex.size()), Math.max(newData.length(), rawIndex.size()));
+	/**
+	 * Builds data frame with specified data, column and row index
+	 * @param rowsIndex is collection of objects to define row index
+	 * @param columnsIndex is collection of objects to define column index
+	 * @param rawData is data to create data frame from
+	 */
+	public DataFrame(final Collection<?> rowsIndex, final Collection<?> columnsIndex,
+			final List<? extends List<? extends Comparable<?>>> rawData) {
+		final Data<?> newData = new Data<>(rawData);
+		newData.reshape(Math.max(newData.size(), columnsIndex.size()), Math.max(newData.length(), rowsIndex.size()));
 
 		this.data = newData;
-		this.columnIndex = new Index(columnIndex, newData.size());
-		System.err.println(newData.size());
-		System.err.println(newData.length());
-		this.rowIndex = new Index(rawIndex, newData.length());
+		this.columnIndex = new Index(columnsIndex, newData.size());
+		this.rowIndex = new Index(rowsIndex, newData.length());
 	}
 
+	/**
+	 * Gets column index
+	 * @return set of column index items
+	 */
 	public Set<Object> getColumnIndex() {
 		return columnIndex.getNames();
 	}
 
+	/**
+	 * Gets row index
+	 * @return set of row index items
+	 */
 	public Set<Object> getRowIndex() {
 		return rowIndex.getNames();
 	}
 
-	public Set<Object> getCol(final Integer column) {
+	private Set<Object> getCol(final Integer column) {
 		return new HashSet<Object>(data.getCol(column));
 	}
 
-	public Set<Object> getCol(final Object column) {
-		return getCol(columnIndex.getNameIndice(column));
+	/**
+	 * Gets column with specified column index item
+	 * @param columnId is column index item
+	 * @return set of items in the specified column
+	 */
+	public Set<Object> getCol(final Object columnId) {
+		return getCol(columnIndex.getNameIndice(columnId));
 	}
 
+	/**
+	 * Builds data frame from CSV file
+	 * @param filePath name of CSV file with its path
+	 * @param hasColumnIndex is true if the first raw defines the column index in
+	 * CSV file
+	 * @param hasRawIndex is true if the first column defines the raw index in CSV
+	 * file
+	 */
 	public DataFrame(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
 		List<Object> rawIndex = null, columnIndex = null;
 		List<List<? extends Comparable<?>>> listObjectList = null;
@@ -229,11 +274,15 @@ public class DataFrame {
 		this.rowIndex = new Index(rawIndex, newData.length());
 	}
 
+	/**
+	 * Gets size of data frame
+	 * @return number of columns in data frame
+	 */
 	public int size() {
 		return data.size();
 	}
 
-	public Data<? extends Comparable<?>> getData() {
+	private Data<? extends Comparable<?>> getData() {
 		return data;
 	}
 
@@ -278,7 +327,7 @@ public class DataFrame {
 
 	/**
 	 * Builds data frame from CSV file with column index in the file
-	 * @param filePath name of file with its path
+	 * @param filePath name of CSV file with its path
 	 * @return new data frame instance with CSV data
 	 */
 	public static DataFrame readCSV(String filePath) {
@@ -287,7 +336,7 @@ public class DataFrame {
 
 	/**
 	 * Builds data frame from CSV file
-	 * @param filePath name of file with its path
+	 * @param filePath name of CSV file with its path
 	 * @param hasColumnIndex is true if the first raw defines the column index in
 	 * CSV file
 	 * @param hasRawIndex is true if the first column defines the raw index in CSV
@@ -296,6 +345,20 @@ public class DataFrame {
 	 */
 	public static DataFrame readCSV(String filePath, Boolean hasColumnIndex, Boolean hasRawIndex) {
 		return new DataFrame(filePath, hasColumnIndex, hasRawIndex);
+	}
+
+	/**
+	 * Creates deep copy of list of lists
+	 * @param srcList list of lists to copy from
+	 * @return new instance of list of lists with contents from src
+	 */
+	public static List<? extends List<? extends Comparable<?>>> clone(
+			final List<? extends List<? extends Comparable<?>>> srcList) {
+		List<List<? extends Comparable<?>>> destList = new ArrayList<>();
+		for (List<? extends Comparable<?>> sublist : srcList) {
+			destList.add(new ArrayList<>(sublist));
+		}
+		return destList;
 	}
 
 	/**
@@ -405,6 +468,11 @@ public class DataFrame {
 		dataFrame.printLines((Object[]) lineNumbers);
 	}
 
+	/**
+	 * Selects columns from specified column index
+	 * @param columnIds is array of column index elements
+	 * @return list of selected columns
+	 */
 	public List<? extends List<? extends Comparable<?>>> selectColumns(final Object... columnIds) {
 		List<List<? extends Comparable<?>>> selectedColumnsList = new ArrayList<>();
 		for (Object columnId : columnIds) {
@@ -417,6 +485,11 @@ public class DataFrame {
 		return selectedColumnsList;
 	}
 
+	/**
+	 * Selects rows from specified row index
+	 * @param rowIds is array of row index elements
+	 * @return list of selected rows
+	 */
 	public List<? extends List<? extends Comparable<?>>> selectRows(final Object... rowIds) {
 		ArrayList<Integer> rowIn = new ArrayList<>();
 		for (Object rowId : rowIds) {
@@ -429,12 +502,46 @@ public class DataFrame {
 		return data.getRows((Integer[]) rowIn.toArray(new Integer[rowIn.size()]));
 	}
 
+	/**
+	 * Creates new data frame from selected columns
+	 * @param columnIds is array of column index elements to select from
+	 * @return new instance of data frame with selected column index
+	 */
 	public DataFrame createFromColumns(final Object... columnIds) {
 		return new DataFrame(Collections.emptyList(), Arrays.asList((Object[]) columnIds),
-				selectColumns((Object[]) columnIds));
+				DataFrame.clone(selectColumns((Object[]) columnIds)));
 	}
 
+	/**
+	 * Creates new data frame from selected rows
+	 * @param rowIds is array of row index elements to select from
+	 * @return new instance of data frame with selected row index
+	 */
 	public DataFrame createFromRows(final Object... rowIds) {
-		return new DataFrame(Arrays.asList((Object[]) rowIds), Collections.emptyList(), selectRows((Object[]) rowIds));
+		return new DataFrame(Arrays.asList((Object[]) rowIds), Collections.emptyList(),
+				DataFrame.clone(selectRows((Object[]) rowIds)));
 	}
+	
+	/**
+	 * Creates new data frame from selected columns
+	 * @param dSource is data frame to get columns from
+	 * @param columnIds is array of column index elements to select from
+	 * @return new instance of data frame with selected column index
+	 */
+	public static DataFrame createFromColumns(DataFrame dSource, final Object... columnIds) {
+		return new DataFrame(Collections.emptyList(), Arrays.asList((Object[]) columnIds),
+				DataFrame.clone(dSource.selectColumns((Object[]) columnIds)));
+	}
+
+	/**
+	 * Creates new data frame from selected rows
+	 * @param dSource is data frame to get columns from
+	 * @param rowIds is array of row index elements to select from
+	 * @return new instance of data frame with selected row index
+	 */
+	public static DataFrame createFromRows(DataFrame dSource, final Object... rowIds) {
+		return new DataFrame(Arrays.asList((Object[]) rowIds), Collections.emptyList(),
+				DataFrame.clone(dSource.selectRows((Object[]) rowIds)));
+	}
+
 }

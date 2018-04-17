@@ -58,7 +58,7 @@ public class Main {
 		//System.out.println(i.toString());
 		System.out.println(DataFrame.readCSV("files/taxables.csv"));
 		DataFrame df = new DataFrame("files/test.csv", true, false);
-		System.out.println(df.getData().getMean(0).toString());
+		System.out.println(df.getMean("LonD").toString());
 		System.out.println(df.getMin("City").toString());
 		System.out.println(df.getMax("LonD").toString());
 		System.out.println(df.getMean("LatM").toString());
@@ -68,7 +68,7 @@ public class Main {
 		df.printLine(7);
 		DataFrame.printLines(df,0,4,5);
 		df.createFromColumns("LonD", "City").print();
-		df.createFromRows(0,20).print();
+		df.createFromRows(0,2).print();
 	}
 
 }
