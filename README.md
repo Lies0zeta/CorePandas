@@ -1,5 +1,5 @@
 # CorePandas
-A Pandas Library built in Java realized by Narek Davtyan and Lies Hadjadj.
+A Pandas Library built in Java realized by Narek Davtyan, Lies Hadjadj and Hosseim Nahal.
 
 ## A first-year master project :mortar_board: :one:  
 
