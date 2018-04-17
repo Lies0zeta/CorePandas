@@ -82,12 +82,13 @@ The project is built with Makefile that uses Dockerfile
 Software requirements:  
 - having `docker` installed (https://docs.docker.com/install/)  
 - having `maven` installed (and its numerous dependencies)  
+- having `make` installed (and its numerous dependencies)  
 - having `bash` terminal (on Windows you can use WSL bash)  
 
 ### Compilation/Building  
 * Step 1: build the project from sources:  
-`maven build`  
+`mvn build`  
 
 ### Testing
 * Step 1: testing the project with defined test:  
-`maven test`
+`mvn test`
