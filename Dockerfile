@@ -62,7 +62,7 @@ WORKDIR /root/
 RUN mkdir -p devops/pandas
 WORKDIR /root/devops/pandas
 # Copy Java sources
-ADD ./src/ ./files/ pom.xml /root/devops/pandas/
+COPY ./src/ ./files/ pom.xml /root/devops/pandas/
 
 # Compile Java sources
 RUN mvn install
