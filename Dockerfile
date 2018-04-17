@@ -68,6 +68,7 @@ COPY ./files/ /root/devops/CorePandas/files
 COPY pom.xml /root/devops/CorePandas/
 
 # Compile Java sources
-RUN mvn install
+RUN mvn compile
 
-# Copy entrypoint scripts
+# Run tests
+RUN mvn test
