@@ -83,6 +83,54 @@ public class DataFrame {
 	}
 
 	/**
+	 * Builds data frame with one row from given objects
+	 * @param rawData is array of objects
+	 * @return new instance of data frame with one row
+	 */
+	@SuppressWarnings("unchecked")
+	public static DataFrame createOneRow(final Object... rawData) {
+		List<List<? extends Comparable<?>>> oneList = new ArrayList<>();
+
+		for (Object rawObject : rawData) {
+			List<? extends Comparable<?>> oneRowList = (List<? extends Comparable<?>>) Arrays.asList(rawObject);
+			oneList.add(oneRowList);
+		}
+
+		return new DataFrame(Collections.emptyList(), Collections.emptyList(), oneList);
+	}
+
+	/**
+	 * Builds data frame with one column from given objects
+	 * @param rawData is array of objects
+	 * @return new instance of data frame with one column
+	 */
+	@SuppressWarnings("unchecked")
+	public static DataFrame createOneColumn(final Object... rawData) {
+		List<List<? extends Comparable<?>>> oneList = new ArrayList<>();
+		List<? extends Comparable<?>> oneColumnList;
+
+		oneColumnList = (List<? extends Comparable<?>>) Arrays.asList(rawData);
+		oneList.add(oneColumnList);
+
+		return new DataFrame(Collections.emptyList(), Collections.emptyList(), oneList);
+	}
+
+	/**
+	 * Builds data frame with columns from given lists of comparable objects
+	 * @param rawData is array of lists of comparable objects
+	 * @return new instance of data frame with columns
+	 */
+	@SuppressWarnings("unchecked")
+	public static DataFrame createColumns(final List<? extends Comparable<?>>... rawData) {
+		List<List<? extends Comparable<?>>> oneList = new ArrayList<>();
+		for (List<? extends Comparable<?>> oneColumnList : rawData) {
+			oneList.add(oneColumnList);
+		}
+
+		return new DataFrame(Collections.emptyList(), Collections.emptyList(), oneList);
+	}
+
+	/**
 	 * Gets column index
 	 * @return set of column index items
 	 */
@@ -369,7 +417,7 @@ public class DataFrame {
 	 * Prints the complete data frame
 	 */
 	public void print() {
-		System.out.println(this.getColumnIndex());
+		System.out.println(" " + this.getColumnIndex());
 		Object[] ar = this.getRowIndex().toArray();
 		for (int i = 0; i < this.getRowIndex().size(); i++) {
 			System.out.print(ar[i]);
@@ -548,25 +596,28 @@ public class DataFrame {
 				DataFrame.clone(dSource.selectRows((Object[]) rowIds)));
 	}
 
+	
+	@SuppressWarnings("unused")
 	public <E> void groupBy(final Object... columnIds) {
 
 		for (Object columnId : columnIds) {
 			Map<?, Long> result = getCol(columnId).stream()
 					.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-//			Map<Object, Long> finalMap = new LinkedHashMap<>();
-//
-//			// Sort a map and add to finalMap
-//			result.entrySet().stream().sorted(Map.Entry.<Object, Long>comparingByValue().reversed())
-//					.forEachOrdered(e -> finalMap.put(e.getKey(), e.getValue()));
+			// Map<Object, Long> finalMap = new LinkedHashMap<>();
+			//
+			// // Sort a map and add to finalMap
+			// result.entrySet().stream().sorted(Map.Entry.<Object,
+			// Long>comparingByValue().reversed())
+			// .forEachOrdered(e -> finalMap.put(e.getKey(), e.getValue()));
 
 			System.out.println(result);
 		}
 
-//		for (Object columnId : columnIds) {
-//			List<List<? extends Comparable<?>>> selectedColumnsList = new ArrayList<>();
-//
-//		}
+		// for (Object columnId : columnIds) {
+		// List<List<? extends Comparable<?>>> selectedColumnsList = new ArrayList<>();
+		//
+		// }
 
 	}
 

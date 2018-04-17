@@ -2,6 +2,7 @@ package CorePandas.CorePandas;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -70,7 +71,17 @@ public class Main {
 		df.createFromColumns("LonD", "City").print();
 		df.createFromRows(0,2).print();
 		
-		df.groupBy("LatD","EW");
+		//df.groupBy("LatD","EW");
+		
+		DataFrame dff = new DataFrame();
+		dff.print();
+		DataFrame.createOneColumn("Hey", "Mr", "Smith").print();
+		System.out.println("========");
+		DataFrame.createColumns().print();
+		System.out.println("========");
+		DataFrame.createColumns(Arrays.asList("Hey", "Mr", "Smith"),Arrays.asList("Hey", "Mrs", "Smith")).print();
+		System.out.println("========");
+//		DataFrame.createRows(Arrays.asList("Hey", "Mr", "Smith"),Arrays.asList("Hey", "Mrs", "Smith")).print();
 	}
 
 }

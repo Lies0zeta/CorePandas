@@ -62,11 +62,11 @@ public class Index {
 		if (names == null) {
 			throw new BadIndexException("I am afraid that the index doesn't exist.\n");
 		}
-		if (names.isEmpty()) {
-			throw new BadIndexException("I am afraid that the index is empty.\n");
-		}
+//		if (names.isEmpty()) {
+//			throw new BadIndexException("I am afraid that the index is empty.\n");
+//		}
 		final Collection<Integer> indices = getNameIndices();
-		if (indices == null || indices.isEmpty() || names.size() != indices.size()) {
+		if (indices == null /*|| indices.isEmpty()*/ || names.size() != indices.size()) {
 			throw new BadIndexException("I am afraid that the index is broken.\n");
 		}
 		return names;
@@ -94,9 +94,9 @@ public class Index {
 		if (indices == null) {
 			throw new BadIndexException("I am afraid that the index doesn't exist.\n");
 		}
-		if (indices.isEmpty()) {
-			throw new BadIndexException("I am afraid that the index is empty.\n");
-		}
+//		if (indices.isEmpty()) {
+//			throw new BadIndexException("I am afraid that the index is empty.\n");
+//		}
 		return indices;
 	}
 

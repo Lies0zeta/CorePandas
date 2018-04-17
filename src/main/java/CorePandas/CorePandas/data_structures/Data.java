@@ -64,18 +64,18 @@ public class Data<E extends Comparable<?>> {
 		return data.size();
 	}
 
-	List<E> getCol(final Integer colNumber) {
+	public List<E> getCol(final Integer colNumber) {
 		return data.get(colNumber);
 	}
 
-	List<E> getRow(Integer rowNumber) {
+	public List<E> getRow(Integer rowNumber) {
 		List<E> l = new ArrayList<>(); 
 		for (int i = 0; i < this.size(); i++) {
 			l.add(data.get(i).get(rowNumber));
 		}
 		return l;
 	}
-	List<? extends List<? extends Comparable<?>>> getRows(Integer ... rowNumbers) {
+	public List<? extends List<? extends Comparable<?>>> getRows(Integer ... rowNumbers) {
 		List<List<E>> ll = new ArrayList<>();
 		for (int i = 0; i < this.size(); i++) {
 			ll.add(new ArrayList<E>()); 
