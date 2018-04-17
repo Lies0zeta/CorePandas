@@ -1,4 +1,4 @@
-package data_structures;
+package CorePandas.CorePandas.data_structures;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,7 +13,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -95,8 +98,9 @@ public class DataFrame {
 		return rowIndex.getNames();
 	}
 
-	private Set<Object> getCol(final Integer column) {
-		return new HashSet<Object>(data.getCol(column));
+	@SuppressWarnings("unchecked")
+	private <E> Set<E> getCol(final Integer column) {
+		return new HashSet<E>((Collection<? extends E>) data.getCol(column));
 	}
 
 	/**
@@ -104,7 +108,7 @@ public class DataFrame {
 	 * @param columnId is column index item
 	 * @return set of items in the specified column
 	 */
-	public Set<Object> getCol(final Object columnId) {
+	public <E> Set<E> getCol(final Object columnId) {
 		return getCol(columnIndex.getNameIndice(columnId));
 	}
 
@@ -521,7 +525,7 @@ public class DataFrame {
 		return new DataFrame(Arrays.asList((Object[]) rowIds), Collections.emptyList(),
 				DataFrame.clone(selectRows((Object[]) rowIds)));
 	}
-	
+
 	/**
 	 * Creates new data frame from selected columns
 	 * @param dSource is data frame to get columns from
@@ -542,6 +546,28 @@ public class DataFrame {
 	public static DataFrame createFromRows(DataFrame dSource, final Object... rowIds) {
 		return new DataFrame(Arrays.asList((Object[]) rowIds), Collections.emptyList(),
 				DataFrame.clone(dSource.selectRows((Object[]) rowIds)));
+	}
+
+	public <E> void groupBy(final Object... columnIds) {
+
+		for (Object columnId : columnIds) {
+			Map<?, Long> result = getCol(columnId).stream()
+					.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+//			Map<Object, Long> finalMap = new LinkedHashMap<>();
+//
+//			// Sort a map and add to finalMap
+//			result.entrySet().stream().sorted(Map.Entry.<Object, Long>comparingByValue().reversed())
+//					.forEachOrdered(e -> finalMap.put(e.getKey(), e.getValue()));
+
+			System.out.println(result);
+		}
+
+//		for (Object columnId : columnIds) {
+//			List<List<? extends Comparable<?>>> selectedColumnsList = new ArrayList<>();
+//
+//		}
+
 	}
 
 }

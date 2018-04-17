@@ -1,11 +1,11 @@
-package main;
+package CorePandas.CorePandas;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import data_structures.*;
+import CorePandas.CorePandas.data_structures.*;
 
 
 public class Main {
@@ -69,6 +69,8 @@ public class Main {
 		DataFrame.printLines(df,0,4,5);
 		df.createFromColumns("LonD", "City").print();
 		df.createFromRows(0,2).print();
+		
+		df.groupBy("LatD","EW");
 	}
 
 }

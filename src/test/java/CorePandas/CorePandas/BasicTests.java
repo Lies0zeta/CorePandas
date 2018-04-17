@@ -1,7 +1,7 @@
-package test;
+package CorePandas.CorePandas;
 
-import data_structures.BadIndexException;
-import data_structures.DataFrame;
+import CorePandas.CorePandas.data_structures.BadIndexException;
+import CorePandas.CorePandas.data_structures.DataFrame;
 
 import static org.junit.Assert.*;
 

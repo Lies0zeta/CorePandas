@@ -1,4 +1,4 @@
-package data_structures;
+package CorePandas.CorePandas.data_structures;
 
 import java.util.ArrayList;
 import java.util.Collection;
