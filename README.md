@@ -92,3 +92,12 @@ Software requirements:
 ### Testing
 * Step 1: testing the project with defined test:  
 `mvn test`
+
+### Docker container
+If you do not wish to install maven on your system, you can use docker instead.
+* Step 1: building the image  
+`make build`  
+* Step 2: run tests in the image  
+`make run`  
+* Step 3: publishing the built image  
+`make publish`  
