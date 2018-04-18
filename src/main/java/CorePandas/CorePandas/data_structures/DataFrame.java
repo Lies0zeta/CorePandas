@@ -160,6 +160,14 @@ public class DataFrame {
 		return getCol(columnIndex.getNameIndice(columnId));
 	}
 
+	public Object[] getRow(final Integer rowNumber) {
+		return data.getRow(rowNumber).toArray();
+	}
+	
+	public Object[] getRow(final Object rowId) {
+		return getRow(rowIndex.getNameIndice(rowId));
+	}
+	
 	/**
 	 * Builds data frame from CSV file
 	 * @param filePath name of CSV file with its path
@@ -334,7 +342,7 @@ public class DataFrame {
 		return data.size();
 	}
 
-	private Data<? extends Comparable<?>> getData() {
+	public Data<? extends Comparable<?>> getData() {
 		return data;
 	}
 
