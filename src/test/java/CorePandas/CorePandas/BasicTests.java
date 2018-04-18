@@ -6,6 +6,7 @@ import CorePandas.CorePandas.data_structures.DataFrame;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Before;
@@ -18,9 +19,9 @@ public class BasicTests {
 	public void setUp() throws Exception {
 		df1 = DataFrame.readCSV("files/taxables.csv");
 		df2 = new DataFrame(
-                Arrays.<String>asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"),
-                Arrays.<String>asList("Index", "Item", "Cost", "Tax", "Total"),
-                Arrays.<List<? extends Object>>asList(
+                (Collection<String>)Arrays.<String>asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"),
+                (Collection<String>)Arrays.<String>asList("Index", "Item", "Cost", "Tax", "Total"),
+                Arrays.<List<? extends Comparable<?>>>asList(
                         Arrays.<Integer>asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
                         Arrays.<String>asList("Fruit of the Loom Girl's Socks", "Rawlings Little League Baseball",
                         		"Secret Antiperspirant", "Deadpool DVD", "Maxwell House Coffee 28 oz", "Banana Boat Sunscreen 8 oz",
@@ -57,19 +58,19 @@ public class BasicTests {
         assertArrayEquals(
                 "data is correct",
                 new Object[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-                df1.getCol(0).toArray()
+                df1.getCol(0)
             );
         assertArrayEquals(
                 "data is correct",
                 new Object[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-                df2.getCol(0).toArray()
+                df2.getCol(0)
             );
 	}
 	
 	@Test
     public final void testColByName() {
-        final Object[] col1 = df1.getCol("Index").toArray();
-        final Object[] col2 = df2.getCol("Index").toArray();
+        final Object[] col1 = df1.getCol("Index");
+        final Object[] col2 = df2.getCol("Index");
         
         assertArrayEquals(
                 "data is correct",
@@ -81,9 +82,9 @@ public class BasicTests {
                 new Object[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
                 col2
             );
-        final Object[] col3 = df1.getCol("Total").toArray();
-        final Object[] col4 = df2.getCol("Total").toArray();
-        System.out.println(col3[0]+","+col3[1]+","+col3[2]);
+        final Object[] col3 = df1.getCol("Total");
+        final Object[] col4 = df2.getCol("Total");
+
         assertArrayEquals(
                 "data is correct",
                 new Object[] {8.57, 3.19, 1.39, 16.08, 7.83, 7.18, 10.75, 9.65, 2.28, 6.65},

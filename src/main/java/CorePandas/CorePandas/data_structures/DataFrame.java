@@ -37,8 +37,8 @@ public class DataFrame {
 	 * Builds empty data frame with specified column index
 	 * @param columnsIndex are objects to define column index
 	 */
-	public DataFrame(final Object... columnsIndex) {
-		this(Arrays.asList((Object[]) columnsIndex));
+	public DataFrame(final String... columnsIndex) {
+		this(Arrays.asList((String[]) columnsIndex));
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class DataFrame {
 	 * @param columnsIndex is collection of objects to define column index
 	 */
 	public DataFrame(final Collection<?> rowsIndex, final Collection<?> columnsIndex) {
-		this(rowsIndex, columnsIndex, Collections.<List<?>>emptyList());
+		this(rowsIndex, columnsIndex, Collections.emptyList());
 	}
 
 	/**
@@ -74,6 +74,7 @@ public class DataFrame {
 	 */
 	public DataFrame(final Collection<?> rowsIndex, final Collection<?> columnsIndex,
 			final List<? extends List<? extends Comparable<?>>> rawData) {
+		
 		final Data<?> newData = new Data<>(rawData);
 		newData.reshape(Math.max(newData.size(), columnsIndex.size()), Math.max(newData.length(), rowsIndex.size()));
 
@@ -146,9 +147,8 @@ public class DataFrame {
 		return rowIndex.getNames();
 	}
 
-	@SuppressWarnings("unchecked")
-	private <E> Set<E> getCol(final Integer column) {
-		return new HashSet<E>((Collection<? extends E>) data.getCol(column));
+	public Object[] getCol(final Integer column) {
+		return data.getCol(column).toArray();
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class DataFrame {
 	 * @param columnId is column index item
 	 * @return set of items in the specified column
 	 */
-	public <E> Set<E> getCol(final Object columnId) {
+	public Object[] getCol(final Object columnId) {
 		return getCol(columnIndex.getNameIndice(columnId));
 	}
 
@@ -346,7 +346,6 @@ public class DataFrame {
 
 	@Override
 	public String toString() {
-		// Iterator<Data<?>> it;
 		return data.toString();
 	}
 
@@ -597,11 +596,10 @@ public class DataFrame {
 	}
 
 	
-	@SuppressWarnings("unused")
 	public <E> void groupBy(final Object... columnIds) {
 
 		for (Object columnId : columnIds) {
-			Map<?, Long> result = getCol(columnId).stream()
+			Map<?, Long> result = Arrays.asList(getCol(columnId)).stream()
 					.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
 			// Map<Object, Long> finalMap = new LinkedHashMap<>();
