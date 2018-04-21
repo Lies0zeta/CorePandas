@@ -99,5 +99,3 @@ If you do not wish to install maven on your system, you can use docker instead.
 `make build`  
 * Step 2: run tests in the image  
 `make run`  
-* Step 3: publishing the built image  
-`make publish`  
