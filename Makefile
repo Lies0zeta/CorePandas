@@ -6,6 +6,4 @@ run: build
 build:
 	docker build -t pandas_builder .
 
-publish: build
-	docker push davtyannarek/corepandas:pandas_builder
 	
